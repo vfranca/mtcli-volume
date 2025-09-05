@@ -16,8 +16,8 @@ volume = "mtcli_volume.plugin:volume"
 
 
 [build-system]
-requires = ["poetry-core>=2.0.0,<3.0.0"]
-build-backend = "poetry.core.masonry.api"
+requires = ["setuptools>=42"]
+build-backend = "setuptools.build_meta"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^8.4.2"
