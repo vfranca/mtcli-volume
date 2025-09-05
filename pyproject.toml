@@ -12,9 +12,19 @@ dependencies = [
 ]
 
 [project.entry-points."mtcli.plugins"]
-volume = "mtcli_vprofile.vprofile:volume"
+volume = "mtcli_vprofile.plugin:volume"
 
 
 [build-system]
 requires = ["poetry-core>=2.0.0,<3.0.0"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.4.2"
+pytest-cov = "^6.2.1"
+black = "^25.1.0"
+mkdocs = "^1.6.1"
+mkdocs-material = "^9.6.18"
+
+[tool.pytest.ini_options]
+addopts = "--cov=mtcli_vprofile --cov-report=html -ra -q"
