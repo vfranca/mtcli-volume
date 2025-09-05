@@ -3,6 +3,7 @@
 import click
 import MetaTrader5 as mt5
 import csv
+from datetime import datetime
 from mtcli.conecta import conectar, shutdown
 from mtcli.logger import setup_logger
 from . import conf
@@ -33,7 +34,8 @@ def volume(symbol, periods, step, exporta_csv):
     dados_ordenados = sorted(profile.items())
 
     if exporta_csv:
-        nome_arquivo = f"volume_profile_{symbol}.csv"
+        data_str = datetime.now().strftime("%Y%m%d_%H%M")
+        nome_arquivo = f"volume_profile_{symbol}_{data_str}.csv"
         with open(nome_arquivo, mode="w", newline="", encoding="utf-8") as f:
             writer = csv.writer(f)
             writer.writerow(["Faixa de Preço", "Volume"])
