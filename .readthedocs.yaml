@@ -7,8 +7,8 @@ build:
 
 python:
   install:
-    - method: poetry
-      path: .
+    - method: pip
+      path: requirements.txt
 
 mkdocs:
   configuration: mkdocs.yml
