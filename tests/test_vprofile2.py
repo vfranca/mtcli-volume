@@ -1,6 +1,7 @@
 import pytest
 from mtcli_vprofile.volume_profile import calcular_volume_profile
 
+
 @pytest.fixture
 def dados_basicos():
     return [
@@ -12,15 +13,18 @@ def dados_basicos():
         {"close": 105, "tick_volume": 60},
     ]
 
+
 def test_volume_profile_basico(dados_basicos):
     profile, poc, av_min, av_max = calcular_volume_profile(dados_basicos, step=1)
     assert poc in dict(profile)
     assert av_min <= poc <= av_max
 
+
 def test_volume_profile_com_step_maior(dados_basicos):
     profile, poc, av_min, av_max = calcular_volume_profile(dados_basicos, step=5)
     assert len(profile) < len(dados_basicos)
     assert poc in dict(profile)
+
 
 def test_volume_profile_volumes_iguais():
     dados = [{"close": p, "tick_volume": 100} for p in range(100, 106)]
@@ -36,4 +40,3 @@ def test_volume_profile_com_dados_vazios():
     assert poc is None
     assert av_min is None
     assert av_max is None
-

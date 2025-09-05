@@ -2,6 +2,7 @@ from unittest.mock import mock_open, patch
 import builtins
 import csv
 
+
 def test_exportacao_csv():
     dados = [
         {"close": 100, "tick_volume": 50},
@@ -16,4 +17,3 @@ def test_exportacao_csv():
         writer.writerows(profile)
 
     m().write.assert_called()  # Verifica se algo foi escrito
-

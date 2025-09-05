@@ -1,6 +1,7 @@
 import pytest
 from mtcli_vprofile.volume_profile import calcular_volume_profile
 
+
 @pytest.fixture
 def dados_mock():
     # Simula candles com preços e volumes
@@ -12,6 +13,7 @@ def dados_mock():
         {"close": 104, "tick_volume": 50},
         {"close": 105, "tick_volume": 60},
     ]
+
 
 def test_calcular_volume_profile(dados_mock):
     step = 1
