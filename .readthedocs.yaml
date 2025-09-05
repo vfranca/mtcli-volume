@@ -8,6 +8,7 @@ build:
 python:
   install:
     - method: setuptools
+      path: .
 
 mkdocs:
   configuration: mkdocs.yml
