@@ -1,5 +1,5 @@
 import pytest
-from mtcli_vprofile.volume_profile import calcular_volume_profile, calcular_estatisticas
+from mtcli_volume.volume_profile import calcular_volume_profile, calcular_estatisticas
 
 
 # Simula candles com preços de fechamento e volumes

@@ -1,5 +1,5 @@
 [project]
-name = "mtcli-vprofile"
+name = "mtcli-volume"
 version = "0.1.0"
 description = "Plugin mtcli que exibe o volume profile"
 authors = [
@@ -12,7 +12,7 @@ dependencies = [
 ]
 
 [project.entry-points."mtcli.plugins"]
-volume = "mtcli_vprofile.plugin:volume"
+volume = "mtcli_volume.plugin:volume"
 
 
 [build-system]
@@ -27,4 +27,4 @@ mkdocs = "^1.6.1"
 mkdocs-material = "^9.6.18"
 
 [tool.pytest.ini_options]
-addopts = "--cov=mtcli_vprofile --cov-report=html -ra -q"
+addopts = "--cov=mtcli_volume --cov-report=html -ra -q"

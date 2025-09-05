@@ -13,7 +13,7 @@ log = setup_logger()
 
 
 @click.command()
-@click.version_option(package_name="mtcli-vprofile")
+@click.version_option(package_name="mtcli-volume")
 @click.option("--symbol", "-s", default="WINV25", help="Símbolo do ativo.")
 @click.option("--periods", "-p", default=500, help="Número de candles.")
 @click.option("--step", "-e", default=5, help="Tamanho do agrupamento de preços.")
