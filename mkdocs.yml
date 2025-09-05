@@ -1,0 +1,9 @@
+site_name: mtcli-volume
+repo_url: https://github.com/vfranca/mtcli-volume
+repo_name: mtcli-volume
+theme:
+  name: readthedocs
+nav:
+  - Início: index.md
+  - Instalação: instalacao.md
+  - Como usar: uso.md

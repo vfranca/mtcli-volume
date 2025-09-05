@@ -24,7 +24,6 @@ pytest = "^8.4.2"
 pytest-cov = "^6.2.1"
 black = "^25.1.0"
 mkdocs = "^1.6.1"
-mkdocs-material = "^9.6.18"
 
 [tool.pytest.ini_options]
 addopts = "--cov=mtcli_volume --cov-report=html -ra -q"
