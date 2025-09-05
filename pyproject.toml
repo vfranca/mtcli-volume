@@ -11,6 +11,12 @@ dependencies = [
     "mtcli (>=1.19.4,<2.0.0)"
 ]
 
+[project.urls]
+homepage = "https://github.com/vfranca/mtcli-volume"
+documentation = "https://mtcli-volume.readthedocs.io/pt-br/latest"
+repository = "https://github.com/vfranca/mtcli-volume"
+issues = "https://github.com/vfranca/mtcli-volume/issues"
+
 [project.entry-points."mtcli.plugins"]
 volume = "mtcli_volume.plugin:volume"
 
