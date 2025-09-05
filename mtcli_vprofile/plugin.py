@@ -16,8 +16,8 @@ log = setup_logger()
 @click.option("--symbol", "-s", default="WINV25", help="Símbolo do ativo.")
 @click.option("--periods", "-p", default=500, help="Número de candles.")
 @click.option("--step", "-e", default=5, help="Tamanho do agrupamento de preços.")
-@click.option("--csv", is_flag=True, help="Exportar para CSV.")
-def volume(symbol, periods, step, csv):
+@click.option("-csv", "--exporta-csv", is_flag=True, help="Exportar para CSV.")
+def volume(symbol, periods, step, exporta_csv):
     """Exibe o Volume Profile agrupando volumes por faixa de preço."""
     conectar()
     rates = mt5.copy_rates_from_pos(symbol, mt5.TIMEFRAME_M1, 0, periods)
@@ -32,7 +32,7 @@ def volume(symbol, periods, step, csv):
 
     dados_ordenados = sorted(profile.items())
 
-    if csv:
+    if exporta_csv:
         nome_arquivo = f"volume_profile_{symbol}.csv"
         with open(nome_arquivo, mode="w", newline="", encoding="utf-8") as f:
             writer = csv.writer(f)
