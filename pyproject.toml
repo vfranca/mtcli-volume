@@ -1,6 +1,6 @@
 [project]
 name = "mtcli-volume"
-version = "1.0.0"
+version = "1.0.1"
 description = "Plugin mtcli para exibir o volume profile"
 authors = [
     {name = "Valmir França da Silva",email = "vfranca3@gmail.com"}
@@ -8,7 +8,7 @@ authors = [
 readme = "README.md"
 requires-python = ">=3.10,<3.14.0"
 dependencies = [
-    "mtcli (>=1.19.4,<2.0.0)"
+    "mtcli"
 ]
 
 [project.urls]
