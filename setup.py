@@ -2,13 +2,13 @@ from setuptools import setup, find_packages
 
 setup(
     name="mtcli-volume",
-    version="1.0.0",
+    version="1.0.2",
     description="Plugin mtcli para exibir o volume profile",
     author="Valmir França da Silva",
     author_email="vfranca3@gmail.com",
     packages=find_packages(),
     install_requires=[
-        "mtcli>=1.19.4,<2.0.0",
+        "mtcli",
     ],
     entry_points={
         "mtcli.plugins": [
