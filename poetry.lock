@@ -347,20 +347,20 @@ files = [
 
 [[package]]
 name = "metatrader5"
-version = "5.0.5200"
+version = "5.0.5260"
 description = "API Connector to MetaTrader 5 Terminal"
 optional = false
 python-versions = "<4,>3.5"
 groups = ["main"]
 files = [
-    {file = "MetaTrader5-5.0.5200-cp310-cp310-win_amd64.whl", hash = "sha256:b42c6def304bcade867217ebbd8effd38c30ce95ce9301ef67b2636cd4d7d9a6"},
-    {file = "MetaTrader5-5.0.5200-cp311-cp311-win_amd64.whl", hash = "sha256:5e5b037b4466425b1533b94ae085f23df77c88e0cfe927cf5d0b46b91fe2288c"},
-    {file = "MetaTrader5-5.0.5200-cp312-cp312-win_amd64.whl", hash = "sha256:9bfb2063abd985e05424eb3c5e8ae978ee3de7557804982e2797319a57be0d66"},
-    {file = "MetaTrader5-5.0.5200-cp313-cp313-win_amd64.whl", hash = "sha256:2f652415a3f6620d1b29ba0cb593d4d91c4559ded8cfe86bde282f10f0b2dedc"},
-    {file = "MetaTrader5-5.0.5200-cp36-cp36m-win_amd64.whl", hash = "sha256:d3296f1db7af70749cd148e76ff82c386d256791413c861cd4fd28fa3fa04d3a"},
-    {file = "MetaTrader5-5.0.5200-cp37-cp37m-win_amd64.whl", hash = "sha256:57f951e2aaa667e4ec3520e56d4207ab74eaaeb41c3b62995093374e5e5fe756"},
-    {file = "MetaTrader5-5.0.5200-cp38-cp38-win_amd64.whl", hash = "sha256:2a43093e10a361b43b257a9f0cbc051485608339f62c87e42a0ee846dcc85dc2"},
-    {file = "MetaTrader5-5.0.5200-cp39-cp39-win_amd64.whl", hash = "sha256:8da958003c2aed903c33cb50aa8be153951c17cc7c04ca7ab11667d9de3e96ef"},
+    {file = "MetaTrader5-5.0.5260-cp310-cp310-win_amd64.whl", hash = "sha256:2e2f6cf628b397bba63bb4419dac3e121f30d99fce594e3265553296966e668d"},
+    {file = "MetaTrader5-5.0.5260-cp311-cp311-win_amd64.whl", hash = "sha256:2a81f4342a70afd5e4c35c00d6a79bcb9d6b65cee17baa93b36a6240bdfcdc0e"},
+    {file = "MetaTrader5-5.0.5260-cp312-cp312-win_amd64.whl", hash = "sha256:d75798d624ba7a85f48156c34eb3e24bb5b7d232f09ee1bd51520d9d2b1ee1a4"},
+    {file = "MetaTrader5-5.0.5260-cp313-cp313-win_amd64.whl", hash = "sha256:87121a7b93a83ed2a49037c60de29c15477533e37dd4b9ae3f94358c59ec4238"},
+    {file = "MetaTrader5-5.0.5260-cp36-cp36m-win_amd64.whl", hash = "sha256:cb3c2442a839ed5513981c6bbdc927f56de4567cdf85d85886c76724ed9c6e0c"},
+    {file = "MetaTrader5-5.0.5260-cp37-cp37m-win_amd64.whl", hash = "sha256:e9a97b746327b0a2ff3fe340c6bf8ca831efee2b36de29dd78484b172afd7a68"},
+    {file = "MetaTrader5-5.0.5260-cp38-cp38-win_amd64.whl", hash = "sha256:8a6fd923e1391236dfb97fd04563d09e77525a8ed92678383b191227ab2538b2"},
+    {file = "MetaTrader5-5.0.5260-cp39-cp39-win_amd64.whl", hash = "sha256:5e9aed2af5ec912e51a430b26a3fcad975926b1683ab68f13746a79e28d2df39"},
 ]
 
 [package.dependencies]
@@ -416,21 +416,19 @@ pyyaml = ">=5.1"
 
 [[package]]
 name = "mtcli"
-version = "1.19.4"
+version = "2.1.0"
 description = "Aplicativo CLI para exibir gráficos do MetaTrader 5 em texto acessível ao leitor de telas"
 optional = false
 python-versions = "<3.14.0,>=3.10"
 groups = ["main"]
 files = [
-    {file = "mtcli-1.19.4-py3-none-any.whl", hash = "sha256:7f55fdbc0b247712f853459fc1a812aef5e885f44a80732565863c3114905a93"},
-    {file = "mtcli-1.19.4.tar.gz", hash = "sha256:7179bf6db84d85354702438e5e0dd6a3fe8c46176f7f69e93d98e978d3221089"},
+    {file = "mtcli-2.1.0-py3-none-any.whl", hash = "sha256:8325069c06c8b98d7332abac0b42b87e5436145d54ef187f58b342cd59b4eafd"},
+    {file = "mtcli-2.1.0.tar.gz", hash = "sha256:39e31711a4d6d6bc407e170087360eecb5b1f25002525a1e8797af4c4938686b"},
 ]
 
 [package.dependencies]
-click = ">=8.2.0,<9.0.0"
-metatrader5 = ">=5.0.4993,<6.0.0"
-numpy = ">=2.2.5,<3.0.0"
-python-dotenv = ">=1.1.0,<2.0.0"
+click = ">=8.2.1,<9.0.0"
+metatrader5 = ">=5.0.5260,<6.0.0"
 
 [package.extras]
 build = ["pyinstaller"]
@@ -610,14 +608,14 @@ dev = ["argcomplete", "attrs (>=19.2)", "hypothesis (>=3.56)", "mock", "requests
 
 [[package]]
 name = "pytest-cov"
-version = "6.2.1"
+version = "6.3.0"
 description = "Pytest plugin for measuring coverage."
 optional = false
 python-versions = ">=3.9"
 groups = ["dev"]
 files = [
-    {file = "pytest_cov-6.2.1-py3-none-any.whl", hash = "sha256:f5bc4c23f42f1cdd23c70b1dab1bbaef4fc505ba950d53e0081d0730dd7e86d5"},
-    {file = "pytest_cov-6.2.1.tar.gz", hash = "sha256:25cc6cc0a5358204b8108ecedc51a9b57b34cc6b8c967cc2c01a4e00d8a67da2"},
+    {file = "pytest_cov-6.3.0-py3-none-any.whl", hash = "sha256:440db28156d2468cafc0415b4f8e50856a0d11faefa38f30906048fe490f1749"},
+    {file = "pytest_cov-6.3.0.tar.gz", hash = "sha256:35c580e7800f87ce892e687461166e1ac2bcb8fb9e13aea79032518d6e503ff2"},
 ]
 
 [package.dependencies]
@@ -642,21 +640,6 @@ files = [
 
 [package.dependencies]
 six = ">=1.5"
-
-[[package]]
-name = "python-dotenv"
-version = "1.1.1"
-description = "Read key-value pairs from a .env file and set them as environment variables"
-optional = false
-python-versions = ">=3.9"
-groups = ["main"]
-files = [
-    {file = "python_dotenv-1.1.1-py3-none-any.whl", hash = "sha256:31f23644fe2602f88ff55e1f5c79ba497e01224ee7737937930c448e4d0e24dc"},
-    {file = "python_dotenv-1.1.1.tar.gz", hash = "sha256:a8a6399716257f45be6a007360200409fce5cda2661e3dec71d23dc15f6189ab"},
-]
-
-[package.extras]
-cli = ["click (>=5.0)"]
 
 [[package]]
 name = "pyyaml"
@@ -850,4 +833,4 @@ watchmedo = ["PyYAML (>=3.10)"]
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.10,<3.14.0"
-content-hash = "01ad24040c1d22e485caba599b1a2116b216f4e9a4bf4e4273b43a94768ded4f"
+content-hash = "a6035b3963e01421b901714a97a6f4d69fd6a039645ffd8fb476d4e30eb6a7a0"
