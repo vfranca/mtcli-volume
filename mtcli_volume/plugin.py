@@ -41,7 +41,7 @@ def volume(symbol, periods, step, exporta_csv):
     profile = calcular_volume_profile(rates, step)
     stats = calcular_estatisticas(profile)
 
-    dados_ordenados = sorted(profile.items())
+    dados_ordenados = sorted(profile.items(), reverse = True)
 
     if exporta_csv:
         data_str = datetime.now().strftime("%Y%m%d_%H%M")
