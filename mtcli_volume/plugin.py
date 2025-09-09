@@ -6,7 +6,7 @@ import csv
 from datetime import datetime
 from mtcli.conecta import conectar, shutdown
 from mtcli.logger import setup_logger
-from .conf import DIGITOS, SYMBOL
+from .conf import DIGITOS, SYMBOL, STEP, PERIODS
 from .volume_profile import calcular_volume_profile, calcular_estatisticas
 
 log = setup_logger()
@@ -18,13 +18,13 @@ log = setup_logger()
     "--symbol", "-s", default=SYMBOL, help="Símbolo do ativo (default WIN$N)."
 )
 @click.option(
-    "--periods", "-p", default=566, help="Número de candles de 1 minuto (default 566)."
+    "--periods", "-p", default=PERIODS, help="Número de candles de 1 minuto (default 566)."
 )
 @click.option(
     "--step",
     "-e",
     type=float,
-    default=100,
+    default=STEP,
     help="Tamanho do agrupamento de preços (default 100).",
 )
 @click.option("-csv", "--exporta-csv", is_flag=True, help="Exportar para CSV.")
