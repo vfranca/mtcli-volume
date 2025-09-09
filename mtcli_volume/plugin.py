@@ -6,7 +6,7 @@ import csv
 from datetime import datetime
 from mtcli.conecta import conectar, shutdown
 from mtcli.logger import setup_logger
-from . import conf
+from .conf import digitos
 from .volume_profile import calcular_volume_profile, calcular_estatisticas
 
 log = setup_logger()
@@ -14,9 +14,19 @@ log = setup_logger()
 
 @click.command()
 @click.version_option(package_name="mtcli-volume")
-@click.option("--symbol", "-s", default="WINV25", help="Símbolo do ativo.")
-@click.option("--periods", "-p", default=500, help="Número de candles.")
-@click.option("--step", "-e", default=5, help="Tamanho do agrupamento de preços.")
+@click.option(
+    "--symbol", "-s", default="WIN$N", help="Símbolo do ativo (default WIN$N)."
+)
+@click.option(
+    "--periods", "-p", default=566, help="Número de candles de 1 minuto (default 566)."
+)
+@click.option(
+    "--step",
+    "-e",
+    type=float,
+    default=100,
+    help="Tamanho do agrupamento de preços (default 100).",
+)
 @click.option("-csv", "--exporta-csv", is_flag=True, help="Exportar para CSV.")
 def volume(symbol, periods, step, exporta_csv):
     """Exibe o Volume Profile agrupando volumes por faixa de preço."""
@@ -47,12 +57,12 @@ def volume(symbol, periods, step, exporta_csv):
         max_vol = max(profile.values())
         for preco, vol in dados_ordenados:
             barra = "█" * (vol // max(1, max_vol // 50))
-            click.echo(f"{preco:>8.{conf.digitos}f} | {vol:>6} {barra}")
+            click.echo(f"{preco:>8.{digitos}f} | {vol:>6} {barra}")
 
         # Estatísticas
-        click.echo(f"\nPOC (Preço de Maior Volume): {stats['poc']}")
+        click.echo(f"\nPOC (Preço de Maior Volume): {stats['poc']:.{digitos}f}")
         click.echo(
-            f"Área de Valor: {stats['area_valor'][0]} a {stats['area_valor'][1]}"
+            f"Área de Valor: {stats['area_valor'][0]:.{digitos}f} a {stats['area_valor'][1]:.{digitos}f}"
         )
         click.echo(f"HVNs: {stats['hvns']}")
         click.echo(f"LVNs: {stats['lvns']}")

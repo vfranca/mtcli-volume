@@ -1,6 +1,7 @@
 """Modelo do volume profile."""
 
 from collections import defaultdict
+from .conf import digitos
 
 
 def calcular_volume_profile(rates, step):
@@ -8,7 +9,7 @@ def calcular_volume_profile(rates, step):
     profile = defaultdict(int)
     for r in rates:
         preco = r["close"]
-        faixa = round(preco / step) * step
+        faixa = round(round(preco / step) * step, digitos)
         profile[faixa] += r["tick_volume"]
     return dict(profile)
 
