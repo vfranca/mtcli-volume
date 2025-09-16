@@ -7,7 +7,7 @@ from datetime import datetime
 from mtcli.conecta import conectar, shutdown
 from mtcli.logger import setup_logger
 from .conf import DIGITOS, SYMBOL, STEP, PERIODS
-from .volume_profile import calcular_volume_profile, calcular_estatisticas
+from .volume import calcular_volume_profile, calcular_estatisticas
 
 log = setup_logger()
 
@@ -34,7 +34,9 @@ def volume(symbol, periods, step, exporta_csv):
     rates = mt5.copy_rates_from_pos(symbol, mt5.TIMEFRAME_M1, 0, periods)
 
     if rates is None or len(rates) == 0:
-        click.echo("❌ Não foi possível obter os dados.")
+        msg = "Não foi possível obter os dados"
+        click.echo(msg)
+        log.error(msg)
         shutdown()
         return
 
