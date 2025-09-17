@@ -4,13 +4,13 @@ from collections import defaultdict
 from .conf import DIGITOS
 
 
-def calcular_volume_profile(rates, step):
+def calcular_volume_profile(rates, step, volume = "tick"):
     """Calcula o volume por faixa de preço."""
     profile = defaultdict(int)
     for r in rates:
         preco = r["close"]
         faixa = round(round(preco / step) * step, DIGITOS)
-        profile[faixa] += r["tick_volume"]
+        profile[faixa] += r["tick_volume"] if volume == "tick" else r["real_volume"]
     return dict(profile)
 
 

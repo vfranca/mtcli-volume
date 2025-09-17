@@ -6,7 +6,7 @@ import csv
 from datetime import datetime
 from mtcli.conecta import conectar, shutdown
 from mtcli.logger import setup_logger
-from .conf import DIGITOS, SYMBOL, STEP, PERIODS
+from .conf import DIGITOS, SYMBOL, STEP, PERIODS, VOLUME
 from .volume import calcular_volume_profile, calcular_estatisticas
 
 log = setup_logger()
@@ -31,9 +31,10 @@ BARRA_CHAR = "#"  # Pode mudar para "|", "=" ou "■" se UTF-8 estiver garantido
     default=STEP,
     help="Tamanho do agrupamento de preços (default 100).",
 )
+@click.option("--volume", "-v", default="tick", help="Tipo de volume (tick ou real), default tick.")
 @click.option("--exporta-csv", "-csv", is_flag=True, help="Exportar para CSV.")
 @click.option("--sem-histograma", "-sh", is_flag=True, help="Oculta o histograma textual de volume.")
-def volume(symbol, periods, step, exporta_csv, sem_histograma):
+def volume(symbol, periods, step, volume, exporta_csv, sem_histograma):
     """Exibe o Volume Profile agrupando volumes por faixa de preço."""
     conectar()
     rates = mt5.copy_rates_from_pos(symbol, mt5.TIMEFRAME_M1, 0, periods)
@@ -45,7 +46,7 @@ def volume(symbol, periods, step, exporta_csv, sem_histograma):
         shutdown()
         return
 
-    profile = calcular_volume_profile(rates, step)
+    profile = calcular_volume_profile(rates, step, volume)
     stats = calcular_estatisticas(profile)
 
     dados_ordenados = sorted(profile.items(), reverse=True)
