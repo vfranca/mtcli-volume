@@ -32,8 +32,8 @@ BARRA_CHAR = "#"  # Pode mudar para "|", "=" ou "■" se UTF-8 estiver garantido
     help="Tamanho do agrupamento de preços (default 100).",
 )
 @click.option("--exporta-csv", "-csv", is_flag=True, help="Exportar para CSV.")
-@click.option("--sem-barras", is_flag=True, help="Oculta as barras visuais de volume.")
-def volume(symbol, periods, step, exporta_csv, sem_barras):
+@click.option("--sem-histograma", "-sh", is_flag=True, help="Oculta o histograma textual de volume.")
+def volume(symbol, periods, step, exporta_csv, sem_histograma):
     """Exibe o Volume Profile agrupando volumes por faixa de preço."""
     conectar()
     rates = mt5.copy_rates_from_pos(symbol, mt5.TIMEFRAME_M1, 0, periods)
@@ -63,7 +63,7 @@ def volume(symbol, periods, step, exporta_csv, sem_barras):
         click.echo(f"\nVolume Profile {symbol}\n")
         max_vol = max(profile.values())
         for preco, vol in dados_ordenados:
-            barra = "" if sem_barras else BARRA_CHAR * (vol // max(1, max_vol // 50))
+            barra = "" if sem_histograma else BARRA_CHAR * (vol // max(1, max_vol // 50))
             click.echo(f"{preco:>8.{DIGITOS}f} | {vol:>6} {barra}")
             # Estatísticas
         click.echo(f"\nPOC (Preço de Maior Volume): {stats['poc']:.{DIGITOS}f}")
