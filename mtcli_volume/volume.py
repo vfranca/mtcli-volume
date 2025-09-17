@@ -16,6 +16,14 @@ def calcular_volume_profile(rates, step):
 
 def calcular_estatisticas(profile):
     """Calcula POC, área de valor, HVNs e LVNs."""
+    if not profile:
+        return {
+            "poc": None,
+            "area_valor": (None, None),
+            "hvns": [],
+            "lvns": [],
+        }
+
     total_volume = sum(profile.values())
     dados = sorted(profile.items())
     volumes_ordenados = sorted(dados, key=lambda x: x[1], reverse=True)

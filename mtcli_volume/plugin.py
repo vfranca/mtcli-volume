@@ -10,6 +10,7 @@ from .conf import DIGITOS, SYMBOL, STEP, PERIODS
 from .volume import calcular_volume_profile, calcular_estatisticas
 
 log = setup_logger()
+BARRA_CHAR = "#"  # Pode mudar para "|", "=" ou "■" se UTF-8 estiver garantido
 
 
 @click.command()
@@ -18,7 +19,10 @@ log = setup_logger()
     "--symbol", "-s", default=SYMBOL, help="Símbolo do ativo (default WIN$N)."
 )
 @click.option(
-    "--periods", "-p", default=PERIODS, help="Número de candles de 1 minuto (default 566)."
+    "--periods",
+    "-p",
+    default=PERIODS,
+    help="Número de candles de 1 minuto (default 566).",
 )
 @click.option(
     "--step",
@@ -27,8 +31,9 @@ log = setup_logger()
     default=STEP,
     help="Tamanho do agrupamento de preços (default 100).",
 )
-@click.option("-csv", "--exporta-csv", is_flag=True, help="Exportar para CSV.")
-def volume(symbol, periods, step, exporta_csv):
+@click.option("--exporta-csv", "-csv", is_flag=True, help="Exportar para CSV.")
+@click.option("--sem-barras", is_flag=True, help="Oculta as barras visuais de volume.")
+def volume(symbol, periods, step, exporta_csv, sem_barras):
     """Exibe o Volume Profile agrupando volumes por faixa de preço."""
     conectar()
     rates = mt5.copy_rates_from_pos(symbol, mt5.TIMEFRAME_M1, 0, periods)
@@ -43,7 +48,7 @@ def volume(symbol, periods, step, exporta_csv):
     profile = calcular_volume_profile(rates, step)
     stats = calcular_estatisticas(profile)
 
-    dados_ordenados = sorted(profile.items(), reverse = True)
+    dados_ordenados = sorted(profile.items(), reverse=True)
 
     if exporta_csv:
         data_str = datetime.now().strftime("%Y%m%d_%H%M")
@@ -58,10 +63,9 @@ def volume(symbol, periods, step, exporta_csv):
         click.echo(f"\nVolume Profile {symbol}\n")
         max_vol = max(profile.values())
         for preco, vol in dados_ordenados:
-            barra = "█" * (vol // max(1, max_vol // 50))
+            barra = "" if sem_barras else BARRA_CHAR * (vol // max(1, max_vol // 50))
             click.echo(f"{preco:>8.{DIGITOS}f} | {vol:>6} {barra}")
-
-        # Estatísticas
+            # Estatísticas
         click.echo(f"\nPOC (Preço de Maior Volume): {stats['poc']:.{DIGITOS}f}")
         click.echo(
             f"Área de Valor: {stats['area_valor'][0]:.{DIGITOS}f} a {stats['area_valor'][1]:.{DIGITOS}f}"
