@@ -31,11 +31,28 @@ BARRA_CHAR = "#"  # Pode mudar para "|", "=" ou "■" se UTF-8 estiver garantido
     default=STEP,
     help="Tamanho do agrupamento de preços (default 100).",
 )
-@click.option("--volume", "-v", default="tick", help="Tipo de volume (tick ou real), default tick.")
+@click.option(
+    "--volume",
+    "-v",
+    default="tick",
+    help="Tipo de volume (tick ou real), default tick.",
+)
 @click.option("--exporta-csv", "-csv", is_flag=True, help="Exportar para CSV.")
-@click.option("--sem-histograma", "-sh", is_flag=True, help="Oculta o histograma textual de volume.")
+@click.option(
+    "--sem-histograma",
+    "-sh",
+    is_flag=True,
+    help="Oculta o histograma textual de volume.",
+)
 def volume(symbol, periods, step, volume, exporta_csv, sem_histograma):
     """Exibe o Volume Profile agrupando volumes por faixa de preço."""
+
+    if volume not in ["tick", "real"]:
+        msg = f"Tipo de volume inválido: {volume}. Use 'tick' ou 'real'."
+        click.echo(msg)
+        log.error(msg)
+        return
+
     conectar()
     rates = mt5.copy_rates_from_pos(symbol, mt5.TIMEFRAME_M1, 0, periods)
 
@@ -64,7 +81,9 @@ def volume(symbol, periods, step, volume, exporta_csv, sem_histograma):
         click.echo(f"\nVolume Profile {symbol}\n")
         max_vol = max(profile.values())
         for preco, vol in dados_ordenados:
-            barra = "" if sem_histograma else BARRA_CHAR * (vol // max(1, max_vol // 50))
+            barra = (
+                "" if sem_histograma else BARRA_CHAR * (vol // max(1, max_vol // 50))
+            )
             click.echo(f"{preco:>8.{DIGITOS}f} | {vol:>6} {barra}")
             # Estatísticas
         click.echo(f"\nPOC (Preço de Maior Volume): {stats['poc']:.{DIGITOS}f}")

@@ -4,7 +4,7 @@ from collections import defaultdict
 from .conf import DIGITOS
 
 
-def calcular_volume_profile(rates, step, volume = "tick"):
+def calcular_volume_profile(rates, step, volume="tick"):
     """Calcula o volume por faixa de preço."""
     profile = defaultdict(int)
     for r in rates:
