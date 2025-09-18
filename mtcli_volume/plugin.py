@@ -34,7 +34,7 @@ BARRA_CHAR = "#"  # Pode mudar para "|", "=" ou "■" se UTF-8 estiver garantido
 @click.option(
     "--volume",
     "-v",
-    default="tick",
+    default=VOLUME,
     help="Tipo de volume (tick ou real), default tick.",
 )
 @click.option("--exporta-csv", "-csv", is_flag=True, help="Exportar para CSV.")
