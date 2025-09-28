@@ -1,6 +1,6 @@
 [project]
 name = "mtcli-volume"
-version = "1.6.1"
+version = "1.7.0"
 description = "Plugin mtcli para exibir o volume profile"
 authors = [
     {name = "Valmir França da Silva",email = "vfranca3@gmail.com"}
@@ -18,7 +18,7 @@ repository = "https://github.com/vfranca/mtcli-volume"
 issues = "https://github.com/vfranca/mtcli-volume/issues"
 
 [project.entry-points."mtcli.plugins"]
-mtcli-volume = "mtcli_volume.plugin:volume"
+mtcli_volume = "mtcli_volume.plugin:register"
 
 [build-system]
 requires = ["poetry-core>=2.0.0,<3.0.0"]
