@@ -13,7 +13,7 @@ log = setup_logger()
 BARRA_CHAR = "#"  # Pode mudar para "|", "=" ou "■" se UTF-8 estiver garantido
 
 
-@click.command()
+@click.command("volume", help="Exibe o Volume Profile, agrupando volumes por faixa de preço no histórico recente.")
 @click.version_option(package_name="mtcli-volume")
 @click.option(
     "--symbol", "-s", default=SYMBOL, help="Símbolo do ativo (default WIN$N)."
