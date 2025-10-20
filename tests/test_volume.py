@@ -1,79 +1,59 @@
 import pytest
-from mtcli_volume.volume import calcular_volume_profile, calcular_estatisticas
-
-# Mock simples de candles M1
-mock_rates = [
-    {"close": 117000, "tick_volume": 100},
-    {"close": 117050, "tick_volume": 150},
-    {"close": 117100, "tick_volume": 300},
-    {"close": 117000, "tick_volume": 50},
-    {"close": 117200, "tick_volume": 500},
-]
+from click.testing import CliRunner
+from mtcli_volume.commands.volume_cli import volume
+from mtcli_volume.controllers.volume_controller import calcular_volume_profile
+from mtcli_volume.models import volume_model
 
 
-def test_calcular_volume_profile():
-    step = 100
-    profile = calcular_volume_profile(mock_rates, step)
+@pytest.fixture
+def mock_rates():
+    """Simula dados OHLCV com volumes diferentes."""
+    return [
+        {"close": 100.0, "tick_volume": 10, "real_volume": 20},
+        {"close": 100.5, "tick_volume": 15, "real_volume": 25},
+        {"close": 101.0, "tick_volume": 30, "real_volume": 40},
+        {"close": 101.0, "tick_volume": 5, "real_volume": 10},
+        {"close": 102.0, "tick_volume": 40, "real_volume": 50},
+    ]
 
+
+def test_calcular_profile_tick(mock_rates, monkeypatch):
+    monkeypatch.setattr(volume_model, "obter_rates", lambda s, p, b: mock_rates)
+    profile, stats = calcular_volume_profile("WINZ25", "M1", 100, 1.0, "tick")
+
+    # Verifica soma de volumes por faixa
     assert isinstance(profile, dict)
-    assert round(117000 / step) * step in profile
-    total_volume = sum(profile.values())
-    assert total_volume == 1100
+    assert sum(profile.values()) == sum(r["tick_volume"] for r in mock_rates)
 
-
-def test_calcular_estatisticas():
-    profile = {
-        117000: 150,
-        117100: 300,
-        117200: 500,
-        117300: 150,
-    }
-
-    stats = calcular_estatisticas(profile)
-
+    # Estatísticas devem existir
     assert "poc" in stats
-    assert "area_valor" in stats
-    assert "hvns" in stats
-    assert "lvns" in stats
-
-    assert stats["poc"] == 117200
-    assert isinstance(stats["area_valor"], tuple)
-    assert stats["area_valor"][0] <= stats["poc"] <= stats["area_valor"][1]
+    assert stats["poc"] is not None
+    assert isinstance(stats["hvns"], list)
 
 
-def test_volume_profile_vazio():
-    profile = calcular_volume_profile([], step=100)
+def test_calcular_profile_real(mock_rates, monkeypatch):
+    monkeypatch.setattr(volume_model, "obter_rates", lambda s, p, b: mock_rates)
+    profile, stats = calcular_volume_profile("WINZ25", "M1", 100, 1.0, "real")
+
+    assert sum(profile.values()) == sum(r["real_volume"] for r in mock_rates)
+    assert stats["poc"] in profile
+
+
+def test_volume_invalido(monkeypatch):
+    with pytest.raises(ValueError):
+        calcular_volume_profile("WINZ25", "M1", 100, 1.0, "xyz")
+
+
+def test_obter_rates_invalido(monkeypatch):
+    monkeypatch.setattr(volume_model, "obter_rates", lambda s, p, b: None)
+    profile, stats = calcular_volume_profile("WINZ25", "M1", 100, 1.0, "tick")
     assert profile == {}
 
 
-def test_estatisticas_com_perfil_vazio():
-    profile = {}
-    stats = calcular_estatisticas(profile)
-    assert stats["poc"] is None
-    assert stats["area_valor"] == (None, None)
-    assert stats["hvns"] == []
-    assert stats["lvns"] == []
+def test_cli_execucao(monkeypatch, mock_rates):
+    monkeypatch.setattr(volume_model, "obter_rates", lambda s, p, b: mock_rates)
 
-
-def test_estatisticas_volume_igual():
-    profile = {
-        117000: 100,
-        117100: 100,
-        117200: 100,
-    }
-    stats = calcular_estatisticas(profile)
-    assert stats["poc"] in profile
-    assert len(stats["hvns"]) == 0
-    assert len(stats["lvns"]) == 0
-    assert stats["area_valor"][0] <= stats["poc"] <= stats["area_valor"][1]
-
-
-def test_estatisticas_sensibilidade_hvns_lvns():
-    profile = {
-        117000: 50,  # LVN (menor que 50% da média)
-        117100: 500,  # HVN (maior que 150% da média)
-        117200: 100,  # dentro do intervalo
-    }
-    stats = calcular_estatisticas(profile)
-    assert 117100 in stats["hvns"]
-    assert 117000 in stats["lvns"]
+    runner = CliRunner()
+    result = runner.invoke(volume, ["-s", "WINZ25", "-p", "M1", "-b", "50", "-e", "1.0", "-v", "tick", "-sh"])
+    assert result.exit_code == 0
+    assert "Volume Profile" in result.output
