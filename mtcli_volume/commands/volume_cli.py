@@ -20,15 +20,10 @@ from mtcli_volume.conf import SYMBOL, PERIOD, BARS, STEP, VOLUME
     "--volume", "-v", default=VOLUME,
     help="Tipo de volume (tick ou real), default tick."
 )
-@click.option("--exporta-csv", "-csv", is_flag=True, help="Exportar resultados para CSV.")
-@click.option(
-    "--sem-histograma", "-sh", is_flag=True,
-    help="Oculta o histograma textual de volume."
-)
-def volume(symbol, period, bars, step, volume, exporta_csv, sem_histograma):
+def volume(symbol, period, bars, step, volume):
     """Exibe o Volume Profile agrupando volumes por faixa de preço."""
     profile, stats = calcular_volume_profile(symbol, period, bars, step, volume)
-    exibir_volume_profile(profile, stats, symbol, exporta_csv, sem_histograma)
+    exibir_volume_profile(profile, stats, symbol)
 
 
 if __name__ == "__main__":
