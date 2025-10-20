@@ -1,7 +1,7 @@
-import pytest
-import mtcli_volume.plugin as plugin
 from click.testing import CliRunner
+import pytest
 
+import mtcli_volume.plugin as plugin
 
 # Simula dados de candles M1
 mock_rates = [

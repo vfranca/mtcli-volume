@@ -1,8 +1,10 @@
 from collections import defaultdict
+
 import MetaTrader5 as mt5
-from mtcli.mt5_context import mt5_conexao
+
 from mtcli.logger import setup_logger
 from mtcli.models.rates_model import RatesModel
+from mtcli.mt5_context import mt5_conexao
 from mtcli_volume.conf import DIGITOS
 
 log = setup_logger()
@@ -57,6 +59,7 @@ def calcular_profile(rates, step, volume="tick"):
 
     return dict(profile)
 
+
 def calcular_estatisticas(profile):
     """Calcula POC, área de valor (70%), HVNs e LVNs."""
     if profile is None or len(profile) == 0:
@@ -93,4 +96,3 @@ def calcular_estatisticas(profile):
         "hvns": hvns,
         "lvns": lvns,
     }
-

@@ -1,5 +1,6 @@
-import pytest
 from click.testing import CliRunner
+import pytest
+
 from mtcli_volume.commands.volume_cli import volume
 from mtcli_volume.controllers.volume_controller import calcular_volume_profile
 from mtcli_volume.models import volume_model
@@ -54,6 +55,9 @@ def test_cli_execucao(monkeypatch, mock_rates):
     monkeypatch.setattr(volume_model, "obter_rates", lambda s, p, b: mock_rates)
 
     runner = CliRunner()
-    result = runner.invoke(volume, ["-s", "WINZ25", "-p", "M1", "-b", "50", "-e", "1.0", "-v", "tick", "-sh"])
+    result = runner.invoke(
+        volume,
+        ["-s", "WINZ25", "-p", "M1", "-b", "50", "-e", "1.0", "-v", "tick", "-sh"],
+    )
     assert result.exit_code == 0
     assert "Volume Profile" in result.output

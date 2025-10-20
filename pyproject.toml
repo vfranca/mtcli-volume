@@ -1,6 +1,6 @@
 [project]
 name = "mtcli-volume"
-version = "2.0.0.dev1"
+version = "2.0.0.dev2"
 description = "Plugin mtcli para exibir o volume profile"
 authors = [
     {name = "Valmir França da Silva",email = "vfranca3@gmail.com"}
@@ -27,8 +27,34 @@ build-backend = "poetry.core.masonry.api"
 [tool.poetry.group.dev.dependencies]
 pytest = "^8.4.2"
 pytest-cov = "^6.2.1"
-black = "^25.1.0"
 pytest-mock = "^3.15.1"
+ruff = "^0.14.1"
 
 [tool.poetry.group.docs.dependencies]
 mkdocs = "^1.6.1"
+
+[tool.ruff]
+line-length = 88
+target-version = "py311"
+
+[tool.ruff.lint]
+select = [
+  "E",    # Estilo
+  "F",    # Lógica
+  "B",    # Boas práticas
+  "I",    # Imports
+  "UP",   # Upgrade
+  "N",    # Naming
+]
+ignore = ["E501"]
+
+[tool.ruff.lint.isort]
+known-first-party = ["mtcli", "mtcli_volume"]
+combine-as-imports = true
+force-sort-within-sections = true
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+line-ending = "auto"
+skip-magic-trailing-comma = false

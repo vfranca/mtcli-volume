@@ -1,5 +1,9 @@
 from mtcli.logger import setup_logger
-from mtcli_volume.models.volume_model import obter_rates, calcular_profile, calcular_estatisticas
+from mtcli_volume.models.volume_model import (
+    calcular_estatisticas,
+    calcular_profile,
+    obter_rates,
+)
 
 log = setup_logger()
 

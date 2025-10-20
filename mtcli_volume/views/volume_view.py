@@ -1,4 +1,5 @@
 import click
+
 from mtcli_volume.conf import DIGITOS
 
 BARRA_CHAR = "#"  # Pode mudar para "■" ou "=" se UTF-8 for garantido
