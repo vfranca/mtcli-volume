@@ -32,11 +32,11 @@ def exibir_volume_profile(profile, stats, symbol, exporta_csv=False, sem_histogr
         return
 
     # Exibição textual
-    click.echo(f"\nVolume Profile — {symbol}\n")
+    click.echo(f"\nVolume Profile {symbol}\n")
     max_vol = max(profile.values())
     for preco, vol in dados_ordenados:
         barra = "" if sem_histograma else BARRA_CHAR * (vol // max(1, max_vol // 50))
-        click.echo(f"{preco:>8.{DIGITOS}f} | {vol:>6} {barra}")
+        click.echo(f"{preco:>8.{DIGITOS}f} {vol:>6} {barra}")
 
     # Estatísticas
     if stats.get("poc") is not None:
