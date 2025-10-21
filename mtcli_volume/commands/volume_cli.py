@@ -11,22 +11,23 @@ from mtcli_volume.views.volume_view import exibir_volume_profile
 )
 @click.version_option(package_name="mtcli-volume")
 @click.option(
-    "--symbol", "-s", default=SYMBOL, help="Símbolo do ativo (default WIN$N)."
+    "--symbol", "-s", default=SYMBOL, show_default=True, help="Simbolo do ativo."
 )
-@click.option("--period", "-p", default=PERIOD, help="Timeframe (ex: M1, M5, H1).")
-@click.option("--bars", "-b", default=BARS, help="Número de barras (default 566).")
+@click.option("--period", "-p", default=PERIOD, show_default=True, help="Timeframe (ex: M1, M5, H1).")
+@click.option("--bars", "-b", default=BARS, show_default=True, help="Numero de barras.")
 @click.option(
     "--step",
     "-e",
     type=float,
-    default=STEP,
-    help="Tamanho do agrupamento de preços (default 100).",
+    default=STEP, show_default=True,
+    help="Tamanho do agrupamento de precos.",
 )
 @click.option(
     "--volume",
     "-v",
     default=VOLUME,
-    help="Tipo de volume (tick ou real), default tick.",
+    show_default=True,
+    help="Tipo de volume (tick ou real).",
 )
 def volume(symbol, period, bars, step, volume):
     """Exibe o Volume Profile agrupando volumes por faixa de preço."""
