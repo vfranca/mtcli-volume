@@ -13,13 +13,20 @@ from mtcli_volume.views.volume_view import exibir_volume_profile
 @click.option(
     "--symbol", "-s", default=SYMBOL, show_default=True, help="Simbolo do ativo."
 )
-@click.option("--period", "-p", default=PERIOD, show_default=True, help="Timeframe (ex: M1, M5, H1).")
+@click.option(
+    "--period",
+    "-p",
+    default=PERIOD,
+    show_default=True,
+    help="Timeframe (ex: M1, M5, H1).",
+)
 @click.option("--bars", "-b", default=BARS, show_default=True, help="Numero de barras.")
 @click.option(
     "--step",
     "-e",
     type=float,
-    default=STEP, show_default=True,
+    default=STEP,
+    show_default=True,
     help="Tamanho do agrupamento de precos.",
 )
 @click.option(
