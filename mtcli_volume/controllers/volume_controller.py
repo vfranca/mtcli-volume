@@ -8,15 +8,17 @@ from mtcli_volume.models.volume_model import (
 log = setup_logger()
 
 
-def calcular_volume_profile(symbol, period, bars, step, volume):
+def calcular_volume_profile(symbol, period, bars, step, volume, data_inicio=None, data_fim=None):
     """Controla o fluxo de cálculo do volume profile."""
     volume = volume.lower().strip()
     if volume not in ["tick", "real"]:
         log.error(f"Tipo de volume inválido: {volume}. Use 'tick' ou 'real'.")
         raise ValueError(f"Tipo de volume inválido: {volume}. Use 'tick' ou 'real'.")
 
-    rates = obter_rates(symbol, period, bars)
-    if not rates:
+    rates = obter_rates(symbol, period, bars, data_inicio, data_fim)
+
+    # ✅ Correção: checagem segura para arrays NumPy
+    if rates is None or len(rates) == 0:
         log.error("Falha ao obter dados de preços para cálculo do volume profile.")
         return {}, {}
 
