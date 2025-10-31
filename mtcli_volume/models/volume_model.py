@@ -1,10 +1,9 @@
 from collections import defaultdict
 from collections.abc import Mapping
-from typing import Any, Dict, List, Union
 from datetime import datetime
-import numpy as np
 
 import MetaTrader5 as mt5
+import numpy as np
 
 from mtcli.logger import setup_logger
 from mtcli.mt5_context import mt5_conexao
@@ -33,7 +32,9 @@ def obter_rates(
 
         try:
             if data_inicio and data_fim:
-                log.debug(f"Obtendo candles de {symbol} entre {data_inicio} e {data_fim}")
+                log.debug(
+                    f"Obtendo candles de {symbol} entre {data_inicio} e {data_fim}"
+                )
                 rates = mt5.copy_rates_range(symbol, tf, data_inicio, data_fim)
             else:
                 log.debug(f"Obtendo {bars} candles de {symbol} a partir da posição 0")
@@ -51,10 +52,10 @@ def obter_rates(
 
 
 def calcular_profile(
-    rates: List[Union[dict, tuple, object]],
+    rates: list[dict | tuple | object],
     step: float,
     volume: str = "tick",
-) -> Dict[float, float]:
+) -> dict[float, float]:
     """Calcula o volume total por faixa de preço, suportando dicionários, numpy.void, objetos ou tuplas."""
     profile = defaultdict(int)
 
@@ -70,7 +71,9 @@ def calcular_profile(
             preco = float(r["close"])
             tick_volume = int(r["tick_volume"])
             # real_volume pode não existir dependendo da corretora
-            real_volume = int(r["real_volume"]) if "real_volume" in r.dtype.names else tick_volume
+            real_volume = (
+                int(r["real_volume"]) if "real_volume" in r.dtype.names else tick_volume
+            )
 
         # --- 3️⃣ Objeto com atributos (ex: namedtuple) ---
         elif hasattr(r, "close"):

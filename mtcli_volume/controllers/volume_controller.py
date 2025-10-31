@@ -8,7 +8,9 @@ from mtcli_volume.models.volume_model import (
 log = setup_logger()
 
 
-def calcular_volume_profile(symbol, period, bars, step, volume, data_inicio=None, data_fim=None):
+def calcular_volume_profile(
+    symbol, period, bars, step, volume, data_inicio=None, data_fim=None
+):
     """Controla o fluxo de cálculo do volume profile."""
     volume = volume.lower().strip()
     if volume not in ["tick", "real"]:

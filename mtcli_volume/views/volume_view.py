@@ -22,7 +22,9 @@ def exibir_volume_profile(profile, stats, symbol):
     # Estatísticas
     if stats.get("poc") is not None:
         click.echo(f"\nPOC {stats['poc']:.{DIGITOS}f}")
-        click.echo(f"VA {stats['area_valor'][0]:.{DIGITOS}f} a {stats['area_valor'][1]:.{DIGITOS}f}")
+        click.echo(
+            f"VA {stats['area_valor'][0]:.{DIGITOS}f} a {stats['area_valor'][1]:.{DIGITOS}f}"
+        )
         click.echo(f"HVNs {stats['hvns']}")
         click.echo(f"LVNs {stats['lvns']}")
     else:
