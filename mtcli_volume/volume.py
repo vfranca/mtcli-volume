@@ -47,15 +47,21 @@ from mtcli_volume.views.volume_view import exibir_volume_profile
 @click.option(
     "--to", "data_fim", type=str, help="Data/hora final no formato 'YYYY-MM-DD HH:MM'."
 )
-def volume(symbol, period, bars, step, volume, data_inicio, data_fim):
+@click.option(
+    "--verbose",
+    "-vv",
+    is_flag=True,
+    help="Mostra informações detalhadas sobre o período e dados analisados.",
+)
+def volume(symbol, period, bars, step, volume, data_inicio, data_fim, verbose):
     """Exibe o Volume Profile agrupando volumes por faixa de preço."""
     inicio = datetime.strptime(data_inicio, "%Y-%m-%d %H:%M") if data_inicio else None
     fim = datetime.strptime(data_fim, "%Y-%m-%d %H:%M") if data_fim else None
 
-    profile, stats = calcular_volume_profile(
-        symbol, period, bars, step, volume, inicio, fim
+    profile, stats, info = calcular_volume_profile(
+        symbol, period, bars, step, volume, inicio, fim, verbose
     )
-    exibir_volume_profile(profile, stats, symbol)
+    exibir_volume_profile(profile, stats, symbol, info, verbose)
 
 
 if __name__ == "__main__":

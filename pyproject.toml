@@ -1,6 +1,6 @@
 [project]
 name = "mtcli-volume"
-version = "2.2.0.dev0"
+version = "2.2.0.dev1"
 description = "Plugin mtcli para exibir o volume profile"
 authors = [
     {name = "Valmir França da Silva",email = "vfranca3@gmail.com"}
