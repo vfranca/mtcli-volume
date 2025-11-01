@@ -1,4 +1,4 @@
-from datetime import UTC, datetime, timedelta, timezone
+from datetime import datetime, timedelta, timezone
 
 import numpy as np
 
@@ -38,18 +38,16 @@ def calcular_volume_profile(
         ultimo = rates[-1]
         if "time" in rates.dtype.names:
             try:
-                # Converte UTC → horário de Brasília
+                # Converte timestamps UTC do MT5 → horário local de Brasília (UTC−3)
                 fuso_brasilia = timezone(timedelta(hours=-3))
 
                 inicio_real = (
                     datetime.utcfromtimestamp(float(primeiro["time"]))
-                    .replace(tzinfo=UTC)
                     .astimezone(fuso_brasilia)
                     .strftime("%Y-%m-%d %H:%M:%S")
                 )
                 fim_real = (
                     datetime.utcfromtimestamp(float(ultimo["time"]))
-                    .replace(tzinfo=UTC)
                     .astimezone(fuso_brasilia)
                     .strftime("%Y-%m-%d %H:%M:%S")
                 )
