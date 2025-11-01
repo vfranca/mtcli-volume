@@ -24,6 +24,7 @@ def exibir_volume_profile(profile, stats, symbol, info=None, verbose=False):
                 "Período analisado",
                 f"{info.get('inicio', '?')} → {info.get('fim', '?')}",
             ),
+            ("Fuso horário", info.get("timezone", "Desconhecido")),
         ]
         largura_esq = max(len(t[0]) for t in linhas) + 2
         for chave, valor in linhas:
