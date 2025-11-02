@@ -35,7 +35,7 @@ def exibir_volume_profile(profile, stats, symbol, info=None, verbose=False):
     # BLOCO PRINCIPAL: Volume Profile
     # ──────────────────────────────────────────────
     dados_ordenados = sorted(profile.items(), reverse=True)
-    click.echo(f"\n📊 Volume Profile — {symbol}\n")
+    click.echo(f"\nVolume Profile — {symbol}\n")
 
     max_vol = max(profile.values())
     largura_preco = max(len(f"{p:.{DIGITOS}f}") for p in profile.keys())
@@ -55,15 +55,15 @@ def exibir_volume_profile(profile, stats, symbol, info=None, verbose=False):
     # ──────────────────────────────────────────────
     click.echo("\n=== Estatísticas ===")
     if stats.get("poc") is not None:
-        click.echo(f"POC              : {stats['poc']:.{DIGITOS}f}")
+        click.echo(f"POC              {stats['poc']:.{DIGITOS}f}")
         click.echo(
-            f"Área de Valor    : {stats['area_valor'][0]:.{DIGITOS}f} → {stats['area_valor'][1]:.{DIGITOS}f}"
+            f"VA {stats['area_valor'][0]:.{DIGITOS}f} a {stats['area_valor'][1]:.{DIGITOS}f}"
         )
         click.echo(
-            f"HVNs (High Vol.) : {', '.join(map(lambda x: f'{x:.{DIGITOS}f}', stats['hvns'])) or 'Nenhum'}"
+            f"HVNs {', '.join(map(lambda x: f'{x:.{DIGITOS}f}', stats['hvns'])) or 'Nenhum'}"
         )
         click.echo(
-            f"LVNs (Low Vol.)  : {', '.join(map(lambda x: f'{x:.{DIGITOS}f}', stats['lvns'])) or 'Nenhum'}"
+            f"LVNs {', '.join(map(lambda x: f'{x:.{DIGITOS}f}', stats['lvns'])) or 'Nenhum'}"
         )
     else:
         click.echo("Estatísticas indisponíveis (dados insuficientes).")

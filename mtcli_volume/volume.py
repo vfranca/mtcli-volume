@@ -2,14 +2,13 @@ from datetime import datetime
 
 import click
 
-from mtcli_volume.conf import BARS, PERIOD, STEP, SYMBOL, VOLUME
+from mtcli_volume.conf import BARS, FROM, PERIOD, STEP, SYMBOL, TIMEZONE, TO, VOLUME
 from mtcli_volume.controllers.volume_controller import calcular_volume_profile
 from mtcli_volume.views.volume_view import exibir_volume_profile
 
 
 @click.command(
-    "volume",
-    help="Exibe o Volume Profile, agrupando volumes por faixa de preço no histórico recente.",
+    help="Exibe o Volume Profile, agrupando volumes por faixa de preço no histórico recente."
 )
 @click.version_option(package_name="mtcli-volume")
 @click.option(
@@ -39,9 +38,21 @@ from mtcli_volume.views.volume_view import exibir_volume_profile
     help="Tipo de volume (tick ou real).",
 )
 @click.option(
-    "--from", "data_inicio", type=str, help="Data/hora inicial (YYYY-MM-DD HH:MM)."
+    "--from",
+    "data_inicio",
+    type=str,
+    default=FROM,
+    show_default=True,
+    help="Data/hora inicial (YYYY-MM-DD HH:MM).",
 )
-@click.option("--to", "data_fim", type=str, help="Data/hora final (YYYY-MM-DD HH:MM).")
+@click.option(
+    "--to",
+    "data_fim",
+    type=str,
+    default=TO,
+    show_default=True,
+    help="Data/hora final (YYYY-MM-DD HH:MM).",
+)
 @click.option(
     "--verbose",
     "-vv",
@@ -52,7 +63,7 @@ from mtcli_volume.views.volume_view import exibir_volume_profile
     "--timezone",
     "-tz",
     type=str,
-    default="America/Sao_Paulo",
+    default=TIMEZONE,
     show_default=True,
     help="Fuso horário para exibição das datas (ex: 'UTC', 'America/Sao_Paulo').",
 )

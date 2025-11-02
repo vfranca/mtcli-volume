@@ -8,3 +8,8 @@ PERIOD = os.getenv("PERIOD", config["DEFAULT"].get("period", fallback="M1"))
 BARS = int(os.getenv("BARS", config["DEFAULT"].getint("bars", fallback=566)))
 STEP = float(os.getenv("STEP", config["DEFAULT"].getfloat("step", fallback=100)))
 VOLUME = os.getenv("VOLUME", config["DEFAULT"].get("volume", fallback="tick"))
+FROM = os.getenv("FROM", config["DEFAULT"].get("from", fallback=""))
+TO = os.getenv("TO", config["DEFAULT"].get("to", fallback=""))
+TIMEZONE = os.getenv(
+    "TIMEZONE", config["DEFAULT"].get("timezone", fallback="America/Sao_Paulo")
+)
