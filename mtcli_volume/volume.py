@@ -19,12 +19,20 @@ from mtcli_volume.views.volume_view import exibir_volume_profile
     "-p",
     default=PERIOD,
     show_default=True,
-    help="Timeframe (ex: M1, M5, H1).",
+    help="Período do volume.",
 )
-@click.option("--bars", "-b", default=BARS, show_default=True, help="Número de barras.")
 @click.option(
-    "--step",
-    "-e",
+    "--periodos",
+    "-po",
+    "bars",
+    default=BARS,
+    show_default=True,
+    help="Quantidade de períodos.",
+)
+@click.option(
+    "--range",
+    "-r",
+    "step",
     type=float,
     default=STEP,
     show_default=True,

@@ -205,14 +205,14 @@ i18n = ["Babel (>=2.7)"]
 
 [[package]]
 name = "markdown"
-version = "3.9"
+version = "3.10"
 description = "Python implementation of John Gruber's Markdown."
 optional = false
-python-versions = ">=3.9"
+python-versions = ">=3.10"
 groups = ["docs"]
 files = [
-    {file = "markdown-3.9-py3-none-any.whl", hash = "sha256:9f4d91ed810864ea88a6f32c07ba8bee1346c0cc1f6b1f9f6c822f2a9667d280"},
-    {file = "markdown-3.9.tar.gz", hash = "sha256:d2900fe1782bd33bdbbd56859defef70c2e78fc46668f8eb9df3128138f2cb6a"},
+    {file = "markdown-3.10-py3-none-any.whl", hash = "sha256:b5b99d6951e2e4948d939255596523444c0e677c669700b1d17aa4a8a464cb7c"},
+    {file = "markdown-3.10.tar.gz", hash = "sha256:37062d4f2aa4b2b6b32aefb80faa300f82cc790cb949a35b8caede34f2b68c0e"},
 ]
 
 [package.extras]
@@ -401,14 +401,14 @@ pyyaml = ">=5.1"
 
 [[package]]
 name = "mtcli"
-version = "3.3.0"
+version = "3.4.0"
 description = "Aplicativo CLI para exibir gráficos do MetaTrader 5 em texto acessível ao leitor de telas"
 optional = false
 python-versions = "<3.14.0,>=3.10"
 groups = ["main"]
 files = [
-    {file = "mtcli-3.3.0-py3-none-any.whl", hash = "sha256:f96054e4198cc314ba52c533b213501247e1d02ae427d6d51b725cb6dc04e0ef"},
-    {file = "mtcli-3.3.0.tar.gz", hash = "sha256:d2796c6c2c7a33c4ffc762b1906b8e689db933071e5d837cb98b45961ab57842"},
+    {file = "mtcli-3.4.0-py3-none-any.whl", hash = "sha256:949286e5e6f5103d555189cbdf6b5b8c2732657e1a9a888fc459e7507f1fe2f0"},
+    {file = "mtcli-3.4.0.tar.gz", hash = "sha256:1a2930fc319269b28e7fbbf6297c6be9b517f581104e5af3b91ee07df67fe4d4"},
 ]
 
 [package.dependencies]
@@ -828,6 +828,18 @@ files = [
 ]
 
 [[package]]
+name = "tzdata"
+version = "2025.2"
+description = "Provider of IANA time zone data"
+optional = false
+python-versions = ">=2"
+groups = ["main"]
+files = [
+    {file = "tzdata-2025.2-py2.py3-none-any.whl", hash = "sha256:1a403fada01ff9221ca8044d701868fa132215d84beb92242d9acd2147f667a8"},
+    {file = "tzdata-2025.2.tar.gz", hash = "sha256:b60a638fcc0daffadf82fe0f57e53d06bdec2f36c4df66280ae79bce6bd6f2b9"},
+]
+
+[[package]]
 name = "watchdog"
 version = "6.0.0"
 description = "Filesystem events monitoring"
@@ -873,4 +885,4 @@ watchmedo = ["PyYAML (>=3.10)"]
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.10,<3.14.0"
-content-hash = "b693f287bccb1b6a07720576fffb76be1b871fe94293e6ac8138c9628b6d895f"
+content-hash = "1c5ed9537fdd4282f6aaf09745c8a8cf01259e78b6b190335da0c9e29c466682"
