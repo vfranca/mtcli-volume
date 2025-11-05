@@ -2,7 +2,16 @@ from datetime import datetime
 
 import click
 
-from mtcli_volume.conf import BARS, FROM, PERIOD, STEP, SYMBOL, TIMEZONE, TO, VOLUME
+from mtcli_volume.conf import (
+    FROM,
+    PERIOD,
+    PERIODOS,
+    RANGE,
+    SYMBOL,
+    TIMEZONE,
+    TO,
+    VOLUME,
+)
 from mtcli_volume.controllers.volume_controller import calcular_volume_profile
 from mtcli_volume.views.volume_view import exibir_volume_profile
 
@@ -25,7 +34,7 @@ from mtcli_volume.views.volume_view import exibir_volume_profile
     "--periodos",
     "-po",
     "bars",
-    default=BARS,
+    default=PERIODOS,
     show_default=True,
     help="Quantidade de períodos.",
 )
@@ -34,7 +43,7 @@ from mtcli_volume.views.volume_view import exibir_volume_profile
     "-r",
     "step",
     type=float,
-    default=STEP,
+    default=RANGE,
     show_default=True,
     help="Tamanho do agrupamento de preços.",
 )
