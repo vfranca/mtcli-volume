@@ -41,14 +41,14 @@ def exibir_volume_profile(profile, stats, symbol, info=None, verbose=False):
     largura_preco = max(len(f"{p:.{DIGITOS}f}") for p in profile.keys())
 
     # Cabeçalho
-    click.echo(f"{'Preço':>{largura_preco}} | Volume | Distribuição")
+    click.echo(f"{'Preço':>{largura_preco}} | Volume 1000X | Distribuição")
     click.echo("-" * (largura_preco + 32))
 
     # Corpo da tabela
     for preco, vol in dados_ordenados:
         barra_len = int(vol / max_vol * 50)
         barra = BARRA_CHAR * barra_len
-        click.echo(f"{preco:>{largura_preco}.{DIGITOS}f} | {vol:>6} | {barra}")
+        click.echo(f"{preco:>{largura_preco}.{DIGITOS}f} | {vol/1000:>6.0f} | {barra}")
 
     # ──────────────────────────────────────────────
     # BLOCO FINAL: Estatísticas
