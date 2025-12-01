@@ -2,18 +2,18 @@ from datetime import datetime
 
 import click
 
-from mtcli_volume.conf import (
-    FROM,
+from .conf import (
+    FIM,
+    INICIO,
+    LIMIT,
     PERIOD,
-    PERIODOS,
     RANGE,
     SYMBOL,
     TIMEZONE,
-    TO,
     VOLUME,
 )
-from mtcli_volume.controllers.volume_controller import calcular_volume_profile
-from mtcli_volume.views.volume_view import exibir_volume_profile
+from .controller import calcular_volume_profile
+from .view import exibir_volume_profile
 
 
 @click.command(
@@ -28,45 +28,50 @@ from mtcli_volume.views.volume_view import exibir_volume_profile
     "-p",
     default=PERIOD,
     show_default=True,
-    help="Período do volume.",
+    help="Timeframe usado no calculo.",
 )
 @click.option(
-    "--periodos",
-    "-po",
-    "bars",
-    default=PERIODOS,
+    "--limit",
+    "-l",
+    default=LIMIT,
     show_default=True,
-    help="Quantidade de períodos.",
+    help="Quantidade de timeframes usados no calculo.",
 )
 @click.option(
     "--range",
     "-r",
-    "step",
     type=float,
     default=RANGE,
     show_default=True,
-    help="Tamanho do agrupamento de preços.",
+    help="Tamanho da faixa da distribuicao.",
 )
 @click.option(
     "--volume",
     "-v",
+    type=click.Choice(["tick", "real"], case_sensitive=False),
     default=VOLUME,
     show_default=True,
-    help="Tipo de volume (tick ou real).",
+    help="Tipo do volume .",
 )
 @click.option(
-    "--from",
-    "data_inicio",
-    type=str,
-    default=FROM,
+    "--format",
+    "-fo",
+    type=click.Choice(["none", "k", "m", "auto"], case_sensitive=False),
+    default="k",
+    show_default=True,
+    help="Formatacao do volume.",
+)
+@click.option(
+    "--inicio",
+    "-i",
+    default=INICIO,
     show_default=True,
     help="Data/hora inicial (YYYY-MM-DD HH:MM).",
 )
 @click.option(
-    "--to",
-    "data_fim",
-    type=str,
-    default=TO,
+    "--fim",
+    "-f",
+    default=FIM,
     show_default=True,
     help="Data/hora final (YYYY-MM-DD HH:MM).",
 )
@@ -85,13 +90,13 @@ from mtcli_volume.views.volume_view import exibir_volume_profile
     help="Fuso horário para exibição das datas (ex: 'UTC', 'America/Sao_Paulo').",
 )
 def volume(
-    symbol, period, bars, step, volume, data_inicio, data_fim, verbose, timezone
+    symbol, period, limit, range, volume, format, inicio, fim, timezone, verbose
 ):
     """Exibe o Volume Profile agrupando volumes por faixa de preço."""
-    inicio = datetime.strptime(data_inicio, "%Y-%m-%d %H:%M") if data_inicio else None
-    fim = datetime.strptime(data_fim, "%Y-%m-%d %H:%M") if data_fim else None
+    inicio = datetime.strptime(inicio, "%Y-%m-%d %H:%M") if inicio else None
+    fim = datetime.strptime(fim, "%Y-%m-%d %H:%M") if fim else None
 
     profile, stats, info = calcular_volume_profile(
-        symbol, period, bars, step, volume, inicio, fim, verbose, timezone
+        symbol, period, limit, range, volume, inicio, fim, verbose, timezone
     )
-    exibir_volume_profile(profile, stats, symbol, info, verbose)
+    exibir_volume_profile(profile, stats, symbol, info, verbose, format)

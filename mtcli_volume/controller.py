@@ -4,7 +4,8 @@ import zoneinfo  # Python 3.9+
 import numpy as np
 
 from mtcli.logger import setup_logger
-from mtcli_volume.models.volume_model import (
+
+from .model import (
     calcular_estatisticas,
     calcular_profile,
     obter_rates,
@@ -16,11 +17,11 @@ log = setup_logger()
 def calcular_volume_profile(
     symbol,
     period,
-    bars,
-    step,
+    limit,
+    range,
     volume,
-    data_inicio=None,
-    data_fim=None,
+    inicio=None,
+    fim=None,
     verbose=False,
     timezone_str="America/Sao_Paulo",
 ):
@@ -30,13 +31,13 @@ def calcular_volume_profile(
         log.error(f"Tipo de volume inválido: {volume}. Use 'tick' ou 'real'.")
         raise ValueError(f"Tipo de volume inválido: {volume}. Use 'tick' ou 'real'.")
 
-    rates = obter_rates(symbol, period, bars, data_inicio, data_fim)
+    rates = obter_rates(symbol, period, limit, inicio, fim)
 
     if rates is None or len(rates) == 0:
         log.error("Falha ao obter dados de preços para cálculo do volume profile.")
         return {}, {}, {}
 
-    profile = calcular_profile(rates, step, volume)
+    profile = calcular_profile(rates, range, volume)
     stats = calcular_estatisticas(profile)
 
     # Captura de informações de contexto

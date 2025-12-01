@@ -1,4 +1,4 @@
-from mtcli_volume.volume import volume
+from .cli import volume
 
 
 def register(cli):
