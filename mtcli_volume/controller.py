@@ -1,13 +1,11 @@
 from datetime import datetime, timedelta, timezone
-import zoneinfo  # Python 3.9+
-
+import zoneinfo
 import numpy as np
 
 from mtcli.logger import setup_logger
-
 from .model import (
-    calcular_estatisticas,
     calcular_profile,
+    calcular_estatisticas,
     obter_rates,
 )
 
@@ -18,67 +16,75 @@ def calcular_volume_profile(
     symbol,
     period,
     limit,
-    range,
+    step,
     volume,
     inicio=None,
     fim=None,
     verbose=False,
     timezone_str="America/Sao_Paulo",
+    criterio_hvn="media",
 ):
-    """Controla o fluxo de cálculo do volume profile, com suporte a timezone configurável."""
+    """
+    Controla o fluxo de cálculo do Volume Profile.
+
+    - Obtém candles via MT5
+    - Calcula Volume Profile por faixa High–Low
+    - Calcula estatísticas (POC, VA, HVN, LVN)
+    """
+
     volume = volume.lower().strip()
-    if volume not in ["tick", "real"]:
-        log.error(f"Tipo de volume inválido: {volume}. Use 'tick' ou 'real'.")
-        raise ValueError(f"Tipo de volume inválido: {volume}. Use 'tick' ou 'real'.")
+    if volume not in ("tick", "real"):
+        raise ValueError("Tipo de volume inválido. Use 'tick' ou 'real'.")
 
     rates = obter_rates(symbol, period, limit, inicio, fim)
 
-    if rates is None or len(rates) == 0:
-        log.error("Falha ao obter dados de preços para cálculo do volume profile.")
+    # ✅ Correção crítica: validação correta para numpy.ndarray
+    if rates is None or not isinstance(rates, np.ndarray) or len(rates) == 0:
+        log.error("Nenhum dado retornado para o cálculo do Volume Profile.")
         return {}, {}, {}
 
-    profile = calcular_profile(rates, range, volume)
-    stats = calcular_estatisticas(profile)
+    profile = calcular_profile(
+        rates=rates,
+        step=step,
+        volume_tipo=volume,
+    )
 
-    # Captura de informações de contexto
+    stats = calcular_estatisticas(
+        profile=profile,
+        criterio=criterio_hvn,
+    )
+
     info = {}
-    if isinstance(rates, np.ndarray) and len(rates) > 0:
-        primeiro = rates[0]
-        ultimo = rates[-1]
-        if "time" in rates.dtype.names:
-            try:
-                # Define fuso horário desejado
-                try:
-                    fuso = zoneinfo.ZoneInfo(timezone_str)
-                except Exception:
-                    log.warning(
-                        f"Fuso horário '{timezone_str}' inválido. Usando UTC−3 (Brasília)."
-                    )
-                    fuso = timezone(timedelta(hours=-3))
+    try:
+        fuso = zoneinfo.ZoneInfo(timezone_str)
+    except Exception:
+        log.warning(
+            f"Fuso horário '{timezone_str}' inválido. Usando UTC−3 (Brasília)."
+        )
+        fuso = timezone(timedelta(hours=-3))
 
-                inicio_real = (
-                    datetime.utcfromtimestamp(float(primeiro["time"]))
-                    .astimezone(fuso)
-                    .strftime("%Y-%m-%d %H:%M:%S")
-                )
-                fim_real = (
-                    datetime.utcfromtimestamp(float(ultimo["time"]))
-                    .astimezone(fuso)
-                    .strftime("%Y-%m-%d %H:%M:%S")
-                )
-            except Exception as e:
-                log.error(f"Erro ao converter timezone: {e}")
-                inicio_real = fim_real = "?"
-        else:
-            inicio_real = fim_real = "?"
+    try:
+        inicio_real = (
+            datetime.utcfromtimestamp(float(rates[0]["time"]))
+            .astimezone(fuso)
+            .strftime("%Y-%m-%d %H:%M:%S")
+        )
+        fim_real = (
+            datetime.utcfromtimestamp(float(rates[-1]["time"]))
+            .astimezone(fuso)
+            .strftime("%Y-%m-%d %H:%M:%S")
+        )
+    except Exception as e:
+        log.error(f"Erro ao converter datas: {e}")
+        inicio_real = fim_real = "?"
 
-        info = {
-            "symbol": symbol,
-            "period": period,
-            "candles": len(rates),
-            "inicio": inicio_real,
-            "fim": fim_real,
-            "timezone": timezone_str,
-        }
+    info = {
+        "symbol": symbol,
+        "period": period,
+        "candles": len(rates),
+        "inicio": inicio_real,
+        "fim": fim_real,
+        "timezone": timezone_str,
+    }
 
     return profile, stats, info
