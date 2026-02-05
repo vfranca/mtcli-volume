@@ -148,6 +148,8 @@ def calcular_estatisticas(profile: dict, criterio: str = "media",
         p_hvn = np.percentile(volumes, percentil_hvn)
         p_lvn = np.percentile(volumes, percentil_lvn)
         hvns = sorted(f for f, v in profile.items() if v >= p_hvn)
+        hvns = sorted(hvns, reverse=True)
         lvns = sorted(f for f, v in profile.items() if v <= p_lvn)
+        lvns = sorted(lvns, reverse=True)
 
     return {"poc": poc, "area_valor": area_valor, "hvns": hvns, "lvns": lvns}

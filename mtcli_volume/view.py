@@ -47,6 +47,6 @@ def exibir_volume_profile(profile, stats, symbol, info=None, verbose=False):
 
     click.echo("\nEstatisticas")
     click.echo(f"POC             {stats['poc']:.{D}f}")
-    click.echo(f"VA              {stats['area_valor'][0]:.{D}f} -> {stats['area_valor'][1]:.{D}f}")
+    click.echo(f"VA              {stats['area_valor'][1]:.{D}f} -> {stats['area_valor'][0]:.{D}f}")
     click.echo(f"HVNs            {', '.join(f'{x:.{D}f}' for x in stats['hvns']) or 'Nenhum'}")
     click.echo(f"LVNs            {', '.join(f'{x:.{D}f}' for x in stats['lvns']) or 'Nenhum'}")
