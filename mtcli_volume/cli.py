@@ -39,13 +39,28 @@ from .view import exibir_volume_profile
 @click.option("--period", "-p", default=PERIOD, show_default=True, help="Timeframe utilizado no cálculo.")
 @click.option("--limit", "-l", default=LIMIT, show_default=True, help="Quantidade de candles analisados.")
 @click.option("--range", "-r", type=float, default=RANGE, show_default=True, help="Tamanho da faixa de preço.")
-@click.option("--volume", "-v", type=click.Choice(["tick", "real"], case_sensitive=False),
-              default=VOLUME, show_default=True, help="Tipo de volume utilizado.")
+@click.option(
+    "--volume", "-v",
+    type=click.Choice(["tick", "real"], case_sensitive=False),
+    default=VOLUME, show_default=True,
+    help="Tipo de volume utilizado."
+)
 @click.option("--inicio", "-i", default=INICIO, show_default=True, help="Data/hora inicial (YYYY-MM-DD HH:MM).")
 @click.option("--fim", "-f", default=FIM, show_default=True, help="Data/hora final (YYYY-MM-DD HH:MM).")
 @click.option("--timezone", "-tz", default=TIMEZONE, show_default=True, help="Fuso horário para exibição.")
-@click.option("--hvn-criterio", type=click.Choice(["media", "percentil"], case_sensitive=False),
-              default="percentil", show_default=True, help="Critério para definição de HVNs/LVNs.")
+@click.option(
+    "--anchor", "-a",
+    type=click.Choice(["day", "week", "month"], case_sensitive=False),
+    default="day",
+    show_default=True,
+    help="Ancoragem do Volume Profile: abertura do dia, semana ou mês."
+)
+@click.option(
+    "--hvn-criterio",
+    type=click.Choice(["media", "percentil"], case_sensitive=False),
+    default="percentil", show_default=True,
+    help="Critério para definição de HVNs/LVNs."
+)
 @click.option("--verbose", "-vv", is_flag=True, help="Exibe informações detalhadas da análise.")
 def volume(
     symbol,
@@ -56,18 +71,12 @@ def volume(
     inicio,
     fim,
     timezone,
+    anchor,
     hvn_criterio,
     verbose,
 ):
     """
     Executa o cálculo e a exibição do Volume Profile.
-
-    O Volume Profile é calculado distribuindo o volume de cada candle
-    igualmente entre todas as faixas de preço compreendidas entre
-    o LOW e o HIGH do candle.
-
-    Esta abordagem fornece uma representação mais precisa da
-    concentração de volume ao longo do eixo de preços.
     """
     inicio_dt = datetime.strptime(inicio, "%Y-%m-%d %H:%M") if inicio else None
     fim_dt = datetime.strptime(fim, "%Y-%m-%d %H:%M") if fim else None
@@ -80,6 +89,7 @@ def volume(
         volume=volume,
         inicio=inicio_dt,
         fim=fim_dt,
+        anchor=anchor.lower(),
         verbose=verbose,
         timezone_str=timezone,
         criterio_hvn=hvn_criterio.lower(),

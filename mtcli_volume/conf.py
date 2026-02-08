@@ -1,11 +1,5 @@
 """
 Configurações padrão do plugin mtcli-volume.
-
-Os valores podem ser sobrescritos por:
-- Variáveis de ambiente
-- Arquivo de configuração do mtcli
-
-Este módulo não contém lógica, apenas parâmetros padrão.
 """
 
 import os

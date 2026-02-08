@@ -1,13 +1,5 @@
 """
 Controller do plugin mtcli-volume.
-
-Este módulo coordena o fluxo de execução do Volume Profile:
-- Solicita dados históricos ao model
-- Aciona o cálculo do Volume Profile
-- Calcula estatísticas de Market Profile
-- Prepara informações de contexto (datas, timezone, candles)
-
-Não realiza cálculos matemáticos nem formatação de saída.
 """
 
 from datetime import datetime, timedelta, timezone
@@ -20,6 +12,26 @@ from .model import calcular_profile, calcular_estatisticas, obter_rates
 log = setup_logger()
 
 
+def resolver_inicio_ancorado(anchor: str, tz):
+    """
+    Resolve a data de início com base na ancoragem.
+    Abertura considerada: 09:00 (B3).
+    """
+    agora = datetime.now(tz)
+
+    if anchor == "day":
+        return agora.replace(hour=9, minute=0, second=0, microsecond=0)
+
+    if anchor == "week":
+        inicio_semana = agora - timedelta(days=agora.weekday())
+        return inicio_semana.replace(hour=9, minute=0, second=0, microsecond=0)
+
+    if anchor == "month":
+        return agora.replace(day=1, hour=9, minute=0, second=0, microsecond=0)
+
+    return None
+
+
 def calcular_volume_profile(
     symbol,
     period,
@@ -28,24 +40,23 @@ def calcular_volume_profile(
     volume,
     inicio=None,
     fim=None,
+    anchor="day",
     verbose=False,
     timezone_str="America/Sao_Paulo",
     criterio_hvn="media",
 ):
-    """
-    Orquestra o cálculo completo do Volume Profile.
-
-    Etapas:
-    - Obtém candles históricos via MetaTrader 5
-    - Calcula o Volume Profile por faixa de preço (High–Low)
-    - Calcula estatísticas de Market Profile (POC, VA, HVN, LVN)
-    - Converte datas para o fuso horário configurado
-
-    Retorna estruturas prontas para consumo pela camada de visualização.
-    """
     volume = volume.lower().strip()
     if volume not in ("tick", "real"):
         raise ValueError("Tipo de volume inválido. Use 'tick' ou 'real'.")
+
+    try:
+        fuso = zoneinfo.ZoneInfo(timezone_str)
+    except Exception:
+        fuso = timezone(timedelta(hours=-3))
+
+    # Ancoragem só é aplicada se --inicio não for informado
+    if inicio is None:
+        inicio = resolver_inicio_ancorado(anchor, fuso)
 
     rates = obter_rates(symbol, period, limit, inicio, fim)
 
@@ -55,11 +66,6 @@ def calcular_volume_profile(
 
     profile = calcular_profile(rates, step, volume)
     stats = calcular_estatisticas(profile, criterio=criterio_hvn)
-
-    try:
-        fuso = zoneinfo.ZoneInfo(timezone_str)
-    except Exception:
-        fuso = timezone(timedelta(hours=-3))
 
     try:
         inicio_real = datetime.utcfromtimestamp(float(rates[0]["time"])).astimezone(fuso)
@@ -74,6 +80,7 @@ def calcular_volume_profile(
         "inicio": str(inicio_real),
         "fim": str(fim_real),
         "timezone": timezone_str,
+        "anchor": anchor,
     }
 
     return profile, stats, info
