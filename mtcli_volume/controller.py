@@ -14,20 +14,19 @@ log = setup_logger()
 
 def resolver_inicio_ancorado(anchor: str, tz):
     """
-    Resolve a data de início com base na ancoragem.
-    Abertura considerada: 09:00 (B3).
+    Resolve a data-base da ancoragem (sem forçar horário fixo).
     """
     agora = datetime.now(tz)
 
     if anchor == "day":
-        return agora.replace(hour=9, minute=0, second=0, microsecond=0)
+        return agora.replace(hour=0, minute=0, second=0, microsecond=0)
 
     if anchor == "week":
         inicio_semana = agora - timedelta(days=agora.weekday())
-        return inicio_semana.replace(hour=9, minute=0, second=0, microsecond=0)
+        return inicio_semana.replace(hour=0, minute=0, second=0, microsecond=0)
 
     if anchor == "month":
-        return agora.replace(day=1, hour=9, minute=0, second=0, microsecond=0)
+        return agora.replace(day=1, hour=0, minute=0, second=0, microsecond=0)
 
     return None
 
@@ -54,22 +53,38 @@ def calcular_volume_profile(
     except Exception:
         fuso = timezone(timedelta(hours=-3))
 
-    # Ancoragem só é aplicada se --inicio não for informado
+    # Resolve ancoragem se --inicio não foi informado
     if inicio is None:
         inicio = resolver_inicio_ancorado(anchor, fuso)
 
-    rates = obter_rates(symbol, period, limit, inicio, fim)
+    rates = None
+    tentativas = 0
+    max_tentativas = 7
 
-    if rates is None or not isinstance(rates, np.ndarray) or len(rates) == 0:
-        log.error("Nenhum dado retornado para o cálculo do Volume Profile.")
+    while tentativas < max_tentativas:
+        rates = obter_rates(symbol, period, limit, inicio, fim)
+        if rates is not None and isinstance(rates, np.ndarray) and len(rates) > 0:
+            break
+
+        inicio -= timedelta(days=1)
+        tentativas += 1
+
+    if rates is None or len(rates) == 0:
+        log.error("Nenhum dado retornado após fallback de ancoragem.")
         return {}, {}, {}
 
     profile = calcular_profile(rates, step, volume)
     stats = calcular_estatisticas(profile, criterio=criterio_hvn)
 
     try:
-        inicio_real = datetime.utcfromtimestamp(float(rates[0]["time"])).astimezone(fuso)
-        fim_real = datetime.utcfromtimestamp(float(rates[-1]["time"])).astimezone(fuso)
+        inicio_real = datetime.utcfromtimestamp(
+            float(rates[0]["time"])
+        ).astimezone(fuso)
+
+        fim_real = datetime.utcfromtimestamp(
+            float(rates[-1]["time"])
+        ).astimezone(fuso)
+
     except Exception:
         inicio_real = fim_real = "?"
 
@@ -81,6 +96,7 @@ def calcular_volume_profile(
         "fim": str(fim_real),
         "timezone": timezone_str,
         "anchor": anchor,
+        "fallback_days": tentativas,
     }
 
     return profile, stats, info

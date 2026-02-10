@@ -11,7 +11,7 @@ Toda a lógica matemática e de mercado reside aqui.
 
 from collections import defaultdict
 from collections.abc import Mapping
-from datetime import datetime
+from datetime import datetime, timezone
 
 import MetaTrader5 as mt5
 import numpy as np
@@ -23,16 +23,34 @@ from mtcli_volume.conf import DIGITOS
 log = setup_logger()
 
 
-def obter_rates(symbol: str, period: str, bars: int,
-                data_inicio: datetime = None, data_fim: datetime = None):
+def _to_utc_naive(dt: datetime | None) -> datetime | None:
+    """
+    Converte datetime com timezone para UTC naive,
+    formato EXIGIDO pela API do MetaTrader 5.
+    """
+    if not dt:
+        return None
+
+    if dt.tzinfo:
+        return dt.astimezone(timezone.utc).replace(tzinfo=None)
+
+    return dt
+
+
+def obter_rates(
+    symbol: str,
+    period: str,
+    bars: int,
+    data_inicio: datetime = None,
+    data_fim: datetime = None,
+):
     """
     Obtém candles históricos do MetaTrader 5.
 
-    Pode buscar:
-    - Um número fixo de candles
-    - Um intervalo de datas específico
-
-    Retorna um numpy.ndarray compatível com os cálculos do Volume Profile.
+    Regras:
+    - Se data_inicio existir → usa copy_rates_range
+    - Se data_fim não existir → assume agora (UTC)
+    - Se nenhuma data existir → usa copy_rates_from_pos
     """
     with mt5_conexao():
         tf = getattr(mt5, f"TIMEFRAME_{period.upper()}", None)
@@ -45,10 +63,24 @@ def obter_rates(symbol: str, period: str, bars: int,
             return None
 
         try:
-            if data_inicio and data_fim:
-                rates = mt5.copy_rates_range(symbol, tf, data_inicio, data_fim)
+            if data_inicio:
+                data_inicio = _to_utc_naive(data_inicio)
+                data_fim = _to_utc_naive(data_fim) or datetime.utcnow()
+
+                rates = mt5.copy_rates_range(
+                    symbol,
+                    tf,
+                    data_inicio,
+                    data_fim,
+                )
             else:
-                rates = mt5.copy_rates_from_pos(symbol, tf, 0, bars)
+                rates = mt5.copy_rates_from_pos(
+                    symbol,
+                    tf,
+                    0,
+                    bars,
+                )
+
         except Exception as e:
             log.error(f"Erro ao obter dados históricos: {e}")
             return None
@@ -64,9 +96,6 @@ def calcular_profile(rates, step: float, volume_tipo: str = "tick"):
     """
     Calcula o Volume Profile distribuindo o volume do candle
     uniformemente entre todas as faixas de preço entre LOW e HIGH.
-
-    Essa abordagem reduz o viés do preço de fechamento e se aproxima
-    do Volume Profile clássico (VAP).
     """
     profile = defaultdict(float)
 
@@ -79,8 +108,11 @@ def calcular_profile(rates, step: float, volume_tipo: str = "tick"):
         elif isinstance(r, np.void):
             low, high = float(r["low"]), float(r["high"])
             tick_volume = int(r["tick_volume"])
-            real_volume = int(r["real_volume"]) if "real_volume" in r.dtype.names else tick_volume
-
+            real_volume = (
+                int(r["real_volume"])
+                if "real_volume" in r.dtype.names
+                else tick_volume
+            )
         else:
             raise TypeError(f"Formato de rate desconhecido: {type(r)}")
 
@@ -107,18 +139,24 @@ def calcular_profile(rates, step: float, volume_tipo: str = "tick"):
     return dict(profile)
 
 
-def calcular_estatisticas(profile: dict, criterio: str = "media",
-                          hvn_multiplicador: float = 1.5, lvn_multiplicador: float = 0.5,
-                          percentil_hvn: int = 80, percentil_lvn: int = 20):
+def calcular_estatisticas(
+    profile: dict,
+    criterio: str = "media",
+    hvn_multiplicador: float = 1.5,
+    lvn_multiplicador: float = 0.5,
+    percentil_hvn: int = 80,
+    percentil_lvn: int = 20,
+):
     """
-    Calcula estatísticas clássicas de Market Profile:
-
-    - POC (Point of Control)
-    - Área de Valor (70%)
-    - HVNs e LVNs com critérios profissionais
+    Calcula estatísticas clássicas de Market Profile.
     """
     if not profile:
-        return {"poc": None, "area_valor": (None, None), "hvns": [], "lvns": []}
+        return {
+            "poc": None,
+            "area_valor": (None, None),
+            "hvns": [],
+            "lvns": [],
+        }
 
     volumes = np.array(list(profile.values()))
     faixas = np.array(list(profile.keys()))
@@ -147,9 +185,12 @@ def calcular_estatisticas(profile: dict, criterio: str = "media",
     else:
         p_hvn = np.percentile(volumes, percentil_hvn)
         p_lvn = np.percentile(volumes, percentil_lvn)
-        hvns = sorted(f for f, v in profile.items() if v >= p_hvn)
-        hvns = sorted(hvns, reverse=True)
-        lvns = sorted(f for f, v in profile.items() if v <= p_lvn)
-        lvns = sorted(lvns, reverse=True)
+        hvns = sorted((f for f, v in profile.items() if v >= p_hvn), reverse=True)
+        lvns = sorted((f for f, v in profile.items() if v <= p_lvn), reverse=True)
 
-    return {"poc": poc, "area_valor": area_valor, "hvns": hvns, "lvns": lvns}
+    return {
+        "poc": poc,
+        "area_valor": area_valor,
+        "hvns": hvns,
+        "lvns": lvns,
+    }
