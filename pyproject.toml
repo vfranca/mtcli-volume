@@ -5,13 +5,13 @@ description = "Plugin mtcli para cálculo e exibição de Volume Profile no term
 readme = "README.md"
 license = "MIT"
 license-files = ["LICENSE"]
-requires-python = ">=3.10,<3.14"
 authors = [
     { name = "Valmir França", email = "vfranca3@gmail.com" }
 ]
 maintainers = [
     { name = "Valmir França", email = "vfranca3@gmail.com" }
 ]
+requires-python = ">=3.10,<3.14"
 
 keywords = [
     "trading",
@@ -35,7 +35,6 @@ classifiers = [
     "Operating System :: OS Independent",
     "Topic :: Office/Business :: Financial :: Investment",
 ]
-
 
 dependencies = [
     "mtcli>=3.7.0",
