@@ -1,20 +1,44 @@
 [project]
 name = "mtcli-volume"
-version = "2.5.1"
+version = "2.5.2"
 description = "Plugin mtcli para cálculo e exibição de Volume Profile no terminal"
 readme = "README.md"
+license = "MIT"
+license-files = ["LICENSE"]
 requires-python = ">=3.10,<3.14"
-
 authors = [
     { name = "Valmir França", email = "vfranca3@gmail.com" }
 ]
-
 maintainers = [
     { name = "Valmir França", email = "vfranca3@gmail.com" }
 ]
 
+keywords = [
+    "trading",
+    "volume-profile",
+    "volume",
+    "metatrader5",
+    "mt5",
+    "cli",
+    "acessibilidade",
+    "screen reader friendly"
+]
+
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Financial and Insurance Industry",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Operating System :: OS Independent",
+    "Topic :: Office/Business :: Financial :: Investment",
+]
+
+
 dependencies = [
-    "mtcli>=3.2.0",
+    "mtcli>=3.7.0",
     "click>=8.3.0,<9.0.0",
     "metatrader5>=5.0.5370,<6.0.0",
     "tzdata>=2025.2"
@@ -27,7 +51,7 @@ repository = "https://github.com/vfranca/mtcli-volume"
 issues = "https://github.com/vfranca/mtcli-volume/issues"
 
 [project.entry-points."mtcli.plugins"]
-vp = "mtcli_volume.plugin:register"
+mtcli-volume = "mtcli_volume.plugin:register"
 
 [build-system]
 requires = ["poetry-core>=2.0.0,<3.0.0"]

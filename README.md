@@ -190,4 +190,4 @@ Pull requests são bem-vindos, especialmente para:
 
 ## Licença
 
-GPL License
+MIT License
